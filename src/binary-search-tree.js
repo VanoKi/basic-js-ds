@@ -18,20 +18,20 @@ class BinarySearchTree {
   constructor() {
     this.root = null
   }
-  getRoot() {
+  root() {
     return this.root
   }
   add(data) {
     this.root = addData(this.root, data)
     function addData(node, data) {
-      if(!node) return new Node(data)
-      if (node.data === data) return node
+      if (!node) return new Node(data); // Создаем новый узел
+      if (data === node.data) return node;
       if (data < node.data) {
-        node.left = addData(node.left, data)
+        node.left = addData(node.left, data);
       } else {
-        node.right = addData(node.right, data)
+        node.right = addData(node.right, data);
       }
-      return node
+      return node;
     }
   }
 
@@ -63,43 +63,48 @@ class BinarySearchTree {
   remove(data) {
     this.root = removeData(this.root, data)
     function removeData(node, data) {
-      if (!node) return null
+      if (!node) return null;
+
       if (data < node.data) {
-        node.left = removeData(node.left, data)
-      } else if (node.data < data) {
-        node.right = removeData(node.right, data)
-        // return node
+        node.left = removeData(node.left, data);
+      } else if (data > node.data) {
+        node.right = removeData(node.right, data);
       } else {
-        if (!node.left && !node.right) return null
-        if (!node.left) return node.right
-        if (!node.right) return  node.right
-        let minRight = node.right
+        // Если нет потомков
+        if (!node.left && !node.right) return null;
+
+        // Если только один потомок
+        if (!node.left) return node.right;
+        if (!node.right) return node.left;
+
+        // Если два потомка, ищем минимальный узел в правом поддереве
+        let minRight = node.right;
         while (minRight.left) {
-          minRight = minRight.left
+          minRight = minRight.left;
         }
-        node.data = minRight.data
-        node.right = removeData(node.right, minRight.data)
-        return node
+        node.data = minRight.data;
+        node.right = removeData(node.right, minRight.data);
       }
+      return node;
     }
   }
 
   min() {
-    if(!this.root) return null;
-    let node = this.root
+    if (!this.root) return null;
+    let node = this.root;
     while (node.left) {
-      node = node.left
+      node = node.left;
     }
-    return node.data;
+    return node.data; // Вернуть минимальное значение
   }
 
   max() {
-    if(!this.root) return null;
-    let node = this.root
+    if (!this.root) return null;
+    let node = this.root;
     while (node.right) {
-      node = node.right
+      node = node.right;
     }
-    return node.data;
+    return node.data; // Вернуть максимальное значение
   }
 }
 
