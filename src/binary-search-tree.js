@@ -16,6 +16,7 @@ class BinarySearchTree {
   add(data) {
     this.root = addData(this.root, data)
     function addData(node, data) {
+      if(!node) return new Node(data)
       if (node.data === data) return node
       if (data < node.data) {
         node.left = addData(node.left, data)
@@ -35,9 +36,20 @@ class BinarySearchTree {
     }
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  find(data) {
+    if(!this.root) return false
+    let cur = this.root
+    let ans = false
+    while(cur && !ans) {
+      if(data < cur.data) {
+        cur = cur.left;
+      } else if(data > cur.data) {
+        cur = cur.right;
+      } else {
+        ans = cur;
+      }
+    }
+    return (!ans)? null : ans;
   }
 
   remove(data) {
@@ -48,44 +60,38 @@ class BinarySearchTree {
         node.left = removeData(node.left, data)
       } else if (node.data < data) {
         node.right = removeData(node.right, data)
-        return node
+        // return node
       } else {
         if (!node.left && !node.right) return null
-        if (!node.left){
-          node = node.right
-          return node
-        }
-        if (!node.right) {
-          node = node.right
-          return node
-        }
-        let minRight = node.right = node.right
+        if (!node.left) return node.right
+        if (!node.right) return  node.right
+        let minRight = node.right
         while (minRight.left) {
           minRight = minRight.left
         }
         node.data = minRight.data
-        node.right = remove(node.right, minRight.data)
+        node.right = removeData(node.right, minRight.data)
         return node
       }
     }
   }
 
   min() {
-    if(!this.root) return;
+    if(!this.root) return null;
     let node = this.root
     while (node.left) {
       node = node.left
     }
-    return;node.data
+    return node.data;
   }
 
   max() {
-    if(!this.root) return;
+    if(!this.root) return null;
     let node = this.root
     while (node.right) {
       node = node.right
     }
-    return;node.data
+    return node.data;
   }
 }
 
