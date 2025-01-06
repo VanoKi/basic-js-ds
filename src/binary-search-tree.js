@@ -8,23 +8,25 @@ const { NotImplementedError } = require('../extensions/index.js');
 */
 class Node {
   constructor(data) {
-    this.data = data
-    this.left = null
-    this.right = null
+    this.data = data;
+    this.left = null;
+    this.right = null;
   }
 }
 
 class BinarySearchTree {
   constructor() {
-    this.root = null
+    this._root = null; 
   }
+
   root() {
-    return this.root
+    return this._root;
   }
+
   add(data) {
-    this.root = addData(this.root, data)
+    this._root = addData(this._root, data);
     function addData(node, data) {
-      if (!node) return new Node(data); // Создаем новый узел
+      if (!node) return new Node(data);
       if (data === node.data) return node;
       if (data < node.data) {
         node.left = addData(node.left, data);
@@ -36,32 +38,30 @@ class BinarySearchTree {
   }
 
   has(data) {
-    return hasData(this.root, data)
+    return hasData(this._root, data);
     function hasData(node, data) {
-      if(!node) return false
-      if (node.data === data) return true
-      return data < node.data ? hasData(node.left, data) : hasData(node.right, data)
+      if (!node) return false;
+      if (data === node.data) return true;
+      return data < node.data ? hasData(node.left, data) : hasData(node.right, data);
     }
   }
 
   find(data) {
-    if(!this.root) return false
-    let cur = this.root
-    let ans = false
-    while(cur && !ans) {
-      if(data < cur.data) {
+    let cur = this._root;
+    while (cur) {
+      if (data < cur.data) {
         cur = cur.left;
-      } else if(data > cur.data) {
+      } else if (data > cur.data) {
         cur = cur.right;
       } else {
-        ans = cur;
+        return cur;
       }
     }
-    return (!ans)? null : ans;
+    return null;
   }
 
   remove(data) {
-    this.root = removeData(this.root, data)
+    this._root = removeData(this._root, data);
     function removeData(node, data) {
       if (!node) return null;
 
@@ -70,14 +70,10 @@ class BinarySearchTree {
       } else if (data > node.data) {
         node.right = removeData(node.right, data);
       } else {
-        // Если нет потомков
         if (!node.left && !node.right) return null;
-
-        // Если только один потомок
         if (!node.left) return node.right;
         if (!node.right) return node.left;
 
-        // Если два потомка, ищем минимальный узел в правом поддереве
         let minRight = node.right;
         while (minRight.left) {
           minRight = minRight.left;
@@ -90,21 +86,21 @@ class BinarySearchTree {
   }
 
   min() {
-    if (!this.root) return null;
-    let node = this.root;
+    if (!this._root) return null;
+    let node = this._root;
     while (node.left) {
       node = node.left;
     }
-    return node.data; // Вернуть минимальное значение
+    return node.data;
   }
 
   max() {
-    if (!this.root) return null;
-    let node = this.root;
+    if (!this._root) return null;
+    let node = this._root;
     while (node.right) {
       node = node.right;
     }
-    return node.data; // Вернуть максимальное значение
+    return node.data;
   }
 }
 
